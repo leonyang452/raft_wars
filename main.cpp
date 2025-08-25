@@ -49,6 +49,9 @@ int main(){
         //cout << GetMouseX() << "\n";
         owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
         //cout << owl.isShooting();
+        if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY())){
+            DrawCircle(50, 50, 5.0f, WHITE);
+        }
         EndDrawing();
     }
     CloseWindow();

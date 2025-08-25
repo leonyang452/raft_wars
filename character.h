@@ -82,7 +82,7 @@ class Character{
         }
 
         bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (xPos <= mouse_xPos) && (mouse_xPos <= xShootArea[1]) && (yShootArea[0] <= mouse_yPos) && (mouse_yPos <= yShootArea[1])){
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && isCursorInShootingArea(xPos, yPos, mouse_xPos, mouse_yPos)){
                 return true;
             }
             return false;
