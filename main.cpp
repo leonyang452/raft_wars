@@ -48,6 +48,7 @@ int main(){
         DrawTexture(owletImage, GAME_WIDTH/2 - owletImage.width/2, GAME_HEIGHT/2 - owletImage.height/2, WHITE);
         //cout << GetMouseX() << "\n";
         owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
+        //cout << owl.isShooting();
         EndDrawing();
     }
     CloseWindow();

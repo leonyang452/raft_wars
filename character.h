@@ -54,6 +54,7 @@ class Character{
         }
 
         // Methods
+
         /**
          * @brief draws a line starting from a players character when the cursor enters the shooting area, showing the trajectory of what the weapon could take
          * 
@@ -65,20 +66,34 @@ class Character{
          * @return none
          */
         void drawShootArea(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
-            int num_points = 5;
-            if ((xPos <= mouse_xPos) && (mouse_xPos <= xShootArea[1]) && (yShootArea[0] <= mouse_yPos) && (mouse_yPos <= yShootArea[1])){
+            if (isCursorInShootingArea(xPos, yPos, mouse_xPos, mouse_yPos)){
+                int num_points = 5;
                 double change_x = mouse_xPos - xPos;
                 double change_y = mouse_yPos - yPos;
 
                 int point_x = xPos + 10;
                 int point_y = yPos + 10;
-
                 for (int i = 0; i < num_points; i++){
                     DrawPixel(point_x, point_y, WHITE);
                     point_x += (int)(change_x/num_points);
                     point_y += (int)(change_y/num_points);
                 }
-            } 
+            }
+        }
+
+        bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (xPos <= mouse_xPos) && (mouse_xPos <= xShootArea[1]) && (yShootArea[0] <= mouse_yPos) && (mouse_yPos <= yShootArea[1])){
+                return true;
+            }
+            return false;
+        }
+
+    private:
+        bool isCursorInShootingArea(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
+            if ((xPos <= mouse_xPos) && (mouse_xPos <= xShootArea[1]) && (yShootArea[0] <= mouse_yPos) && (mouse_yPos <= yShootArea[1])){
+                return true;
+            }
+            return false;
         }
 
 
