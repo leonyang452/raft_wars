@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <raylib.h>
+#include "character.h"
 using namespace std;
 
 /**
@@ -27,6 +28,10 @@ int main(){
     Color green = {20, 160, 133, 255};
     InitWindow(GAME_WIDTH, GAME_HEIGHT, "Raft Wars");
     Texture2D owletImage = loadImage("assets/Owlet_Monster.png");
+    Character owl(4,GAME_WIDTH/2 - owletImage.width/2,2);
+    // cout << owl.get_xPosition();
+
+
 
     SetTargetFPS(60); // 60 times per second
 
@@ -39,8 +44,10 @@ int main(){
 
         // 3. Drawing
         BeginDrawing();
-        ClearBackground(BLACK);
+        ClearBackground(green);
         DrawTexture(owletImage, GAME_WIDTH/2 - owletImage.width/2, GAME_HEIGHT/2 - owletImage.height/2, WHITE);
+        //cout << GetMouseX() << "\n";
+        cout << owl.drawShootArea(GAME_WIDTH/2 - owletImage.width/2, 1500, GetMouseX(), GetMouseY());
         EndDrawing();
     }
     CloseWindow();
