@@ -82,6 +82,18 @@ class Character{
             }
         }
 
+        /**
+         * @brief checks if a player is trying to shoot there weapon
+         * 
+         * checks if a players cursor is within the shooting area and if the mouse is clicked
+         * 
+         * @param xPos: The x coordinate of the player (Type: int)
+         * @param yPos: The y coordinate of the player (Type: int)
+         * @param mouse_xPos: The x coordinate of the cursor (Type: int)
+         * @param mouse_yPos: The y coordinate of the cursor (Type: int)
+         * 
+         * @return true/false
+         */
         bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && isCursorInShootingArea(xPos, yPos, mouse_xPos, mouse_yPos)){
                 return true;
@@ -90,6 +102,18 @@ class Character{
         }
 
     private:
+        /**
+         * @brief checks if a players cursor is within the shooting area
+         * 
+         * this method is private because it is only used within character.h
+         * 
+         * @param xPos: The x coordinate of the player (Type: int)
+         * @param yPos: The y coordinate of the player (Type: int)
+         * @param mouse_xPos: The x coordinate of the cursor (Type: int)
+         * @param mouse_yPos: The y coordinate of the cursor (Type: int)
+         * 
+         * @return true/false
+         */
         bool isCursorInShootingArea(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
             if ((xPos <= mouse_xPos) && (mouse_xPos <= xShootArea[1]) && (yShootArea[0] <= mouse_yPos) && (mouse_yPos <= yShootArea[1])){
                 return true;
