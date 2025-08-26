@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <raylib.h>
-#include "character.h"
+#include "header files\character.h"
+#include "header files\weapon.h"
+
 using namespace std;
 
 /**

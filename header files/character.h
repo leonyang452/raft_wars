@@ -13,6 +13,7 @@ class Character{
         int yPosition;
         int xShootArea[2];
         int yShootArea[2];
+        // need to add a hitbox
 
     public:
         // Constructors
