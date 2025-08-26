@@ -45,21 +45,20 @@ class Weapon{
         int u_y = yPosOfcharacter - mouse_yPos; // initial velocity in the y direction
         double a_y = -9.8; // gravity on earth
         int s_x = 0; // displacement in the x direction
-        int s_y = 0; // displacement in the y direction
+        double s_y = 0; // displacement in the y direction
         double t = 0.25;
 
-        s_y = (int)(u_y * t) + (int)(1/2 * a_y) * (int)(std::pow(t, 2));
-        //t += 0.25;
-        //std::cout << "hey";
+        s_y = (u_y * t) + (0.5) * (a_y) * (t * t);
 
         while (yPosOfcharacter - s_y < yPosOfcharacter){
-            s_y = (int)(u_y * t) + (int)(1/2 * a_y) * (int)(std::pow(t, 2));
+            s_y = (u_y * t) + (0.5) * (a_y) * (t * t);
             s_x = (int)(u_x * t);
-            std::cout << "hey";
+            //std::cout << yPosOfcharacter - s_y << "\n";
 
-            //DrawCircle(xPosOfcharacter + s_x, yPosOfcharacter - s_y, 5.0f, RED);
+            DrawCircle(xPosOfcharacter + s_x, yPosOfcharacter - s_y, 5.0f, RED);
             t += 0.25;
         }
+        
     }
 
 };

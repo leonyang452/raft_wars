@@ -54,7 +54,7 @@ int main(){
         if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY())){
             DrawCircle(50, 50, 5.0f, WHITE);
             Weapon w1(5);
-            w1.calculateTrajectoryPosition(100, 234, GetMouseX(), GetMouseY());
+            w1.calculateTrajectoryPosition(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
         }
         EndDrawing();
     }
