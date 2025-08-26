@@ -3,11 +3,12 @@
 #include <iostream>
 #include <string>
 #include <raylib.h>
+#include <cmath>
 class Weapon{
     // attributes
     private:
-        int xPos;
-        int yPos;
+        int xPos = 0;
+        int yPos = 0;
         int massOfWeapon; //const
 
     // constructor
@@ -17,15 +18,15 @@ class Weapon{
         }
 
     // Setters
-    int set_xPos(int xPosIn){
+    void set_xPos(int xPosIn){
         xPos = xPosIn;
     }
 
-    int yPos(int yPosIn){
+    void set_yPos(int yPosIn){
         yPos = yPosIn;
     }
 
-    int set_massOfWeapon(int massOfWeaponIn){
+    void set_massOfWeapon(int massOfWeaponIn){
         massOfWeapon = massOfWeaponIn;
     }
 
@@ -39,6 +40,27 @@ class Weapon{
     }
 
     // Methods
+    void calculateTrajectoryPosition(int xPosOfcharacter, int yPosOfcharacter, int mouse_xPos, int mouse_yPos){
+        int u_x = mouse_xPos - xPosOfcharacter; // initial velocity in the x direction
+        int u_y = yPosOfcharacter - mouse_yPos; // initial velocity in the y direction
+        double a_y = -9.8; // gravity on earth
+        int s_x = 0; // displacement in the x direction
+        int s_y = 0; // displacement in the y direction
+        double t = 0.25;
+
+        s_y = (int)(u_y * t) + (int)(1/2 * a_y) * (int)(std::pow(t, 2));
+        //t += 0.25;
+        //std::cout << "hey";
+
+        while (yPosOfcharacter - s_y < yPosOfcharacter){
+            s_y = (int)(u_y * t) + (int)(1/2 * a_y) * (int)(std::pow(t, 2));
+            s_x = (int)(u_x * t);
+            std::cout << "hey";
+
+            //DrawCircle(xPosOfcharacter + s_x, yPosOfcharacter - s_y, 5.0f, RED);
+            t += 0.25;
+        }
+    }
 
 };
 
