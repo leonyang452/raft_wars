@@ -31,7 +31,7 @@ int main(){
     InitWindow(GAME_WIDTH, GAME_HEIGHT, "Raft Wars");
     Texture2D owletImage = loadImage("assets/Owlet_Monster.png");
     Character owl(4, 100, 234);
-    bool test = false;
+    Weapon w1(5);
     int u_x = 0; // initial velocity in the x direction
     int u_y = 0; // initial velocity in the y direction
     double a_y = -9.8; // gravity on earth
@@ -55,35 +55,29 @@ int main(){
         BeginDrawing();
         ClearBackground(BLACK);
         DrawTexture(owletImage, 100, 234, WHITE);
-        //cout << GetMouseX() << "\n";
         owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
-        //cout << owl.isShooting();
+
         if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY())){
-            //DrawCircle(50, 50, 5.0f, WHITE);
-            Weapon w1(5);
-            //w1.calculateTrajectoryPosition(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
-            u_x = GetMouseX() - owl.get_xPosition(); // initial velocity in the x direction
-            u_y = owl.get_yPosition() - GetMouseY(); // initial velocity in the y direction
-            s_y = (u_y * t) + (0.5) * (a_y) * (t * t);
-            s_x = (int)(u_x * t);
-            test = true;
+            u_x = w1.calculate_initial_velocity_x(GetMouseX(), owl.get_xPosition()); 
+            u_y = w1.calculate_initial_velocity_y(GetMouseY(), owl.get_yPosition()); 
+
+            s_x = w1.calculate_displacement_x(u_x, t);
+            s_y = w1.calculate_displacement_y(u_y, a_y, t);
+            w1.set_shotInProgress(true);
 
         }
-        cout << "owl position = " << owl.get_yPosition() << " and ball position = " << owl.get_yPosition() - s_y <<"\n";
-        //cout << "ball position = " << owl.get_yPosition() - s_y << "\n";
-        if (test && (owl.get_yPosition() - s_y < owl.get_yPosition())){
-            //std::cout << yPosOfcharacter - s_y << "\n";
+
+        if (w1.get_shotInProgress() && (owl.get_yPosition() - s_y < owl.get_yPosition())){
             DrawCircle(owl.get_xPosition() + s_x, owl.get_yPosition() - s_y, 5.0f, RED);
             t += 0.25;
-            s_y = (u_y * t) + (0.5) * (a_y) * (t * t);
-            s_x = (int)(u_x * t);
+            s_x = w1.calculate_displacement_x(u_x, t);
+            s_y = w1.calculate_displacement_y(u_y, a_y, t);
         }else{
-            test = false;
-            s_y = 0;
+            w1.set_shotInProgress(false);
             s_x = 0;
+            s_y = 0;
             t = 0.25;
         }
-        cout << test;
         EndDrawing();
     }
     CloseWindow();

@@ -10,6 +10,7 @@ class Weapon{
         int xPos = 0;
         int yPos = 0;
         int massOfWeapon; //const
+        bool shotInProgress = false;
 
     // constructor
     public:
@@ -30,6 +31,10 @@ class Weapon{
         massOfWeapon = massOfWeaponIn;
     }
 
+    void set_shotInProgress(bool shotInProgressIn){
+        shotInProgress = shotInProgressIn;
+    }
+
     // Getters
     int get_xPos(){
         return xPos;
@@ -37,6 +42,10 @@ class Weapon{
 
     int get_yPos(){
         return yPos;
+    }
+
+    bool get_shotInProgress(){
+        return shotInProgress;
     }
 
     // Methods
@@ -61,6 +70,26 @@ class Weapon{
         }
         
     }
+
+    int calculate_initial_velocity_x(int mouse_xPos, int xPosOfcharacter){
+        return mouse_xPos - xPosOfcharacter;
+    }
+
+    int calculate_initial_velocity_y(int mouse_yPos, int yPosOfcharacter){
+        return yPosOfcharacter - mouse_yPos;
+    }
+
+    int calculate_displacement_y(int u_y, double a_y, double t){
+        return (int)((u_y * t) + (0.5) * (a_y) * (t * t));
+    }
+
+    int calculate_displacement_x(int u_x, double t){
+        return (int)(u_x * t);
+    }
+
+
+
+
 
 };
 
