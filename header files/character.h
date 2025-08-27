@@ -4,7 +4,7 @@
 #include <string>
 #include <raylib.h>
 
-int SHOOTING_AREA_RANGE = 75;
+int SHOOTING_AREA_RANGE = 100;
 
 class Character{
     private:
