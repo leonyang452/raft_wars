@@ -51,12 +51,13 @@ class Weapon{
         s_y = (u_y * t) + (0.5) * (a_y) * (t * t);
 
         while (yPosOfcharacter - s_y < yPosOfcharacter){
+            //ClearBackground(BLACK);
             s_y = (u_y * t) + (0.5) * (a_y) * (t * t);
             s_x = (int)(u_x * t);
             //std::cout << yPosOfcharacter - s_y << "\n";
 
             DrawCircle(xPosOfcharacter + s_x, yPosOfcharacter - s_y, 5.0f, RED);
-            t += 0.25;
+            t += 0.01;
         }
         
     }
