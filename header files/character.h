@@ -109,8 +109,11 @@ class Character{
             return false;
         }
 
-        bool isHit(){
-            
+        bool isHit(int weaponPosX, int weaponPosY){
+            if ((xHitBox[0] <= weaponPosX && weaponPosX <= xHitBox[1]) && (yHitBox[1] <= weaponPosY && weaponPosY <= yHitBox[0])){
+                return true;
+            }
+            return false;
         }
 
     private:
@@ -119,10 +122,10 @@ class Character{
          * 
          * this method is private because it is only used within character.h
          * 
-         * @param xPos: The x coordinate of the player (Type: int)
-         * @param yPos: The y coordinate of the player (Type: int)
-         * @param mouse_xPos: The x coordinate of the cursor (Type: int)
-         * @param mouse_yPos: The y coordinate of the cursor (Type: int)
+         * @param xPos: The x coordinate of the player 
+         * @param yPos: The y coordinate of the player 
+         * @param mouse_xPos: The x coordinate of the cursor 
+         * @param mouse_yPos: The y coordinate of the cursor 
          * 
          * @return true/false
          */

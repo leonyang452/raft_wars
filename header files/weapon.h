@@ -4,6 +4,9 @@
 #include <string>
 #include <raylib.h>
 #include <cmath>
+#include <cstdlib>
+#include <ctime>
+
 class Weapon{
     // attributes
     private:
@@ -87,9 +90,17 @@ class Weapon{
         return (int)(u_x * t);
     }
 
+    double calculateDamage(int u_x, int u_y){
+        return std::sqrt((u_x * u_x) + (u_y * u_y));
+    }
 
+    int randomiseVelocityX(int xPosOfCharacter){
+        return xPosOfCharacter - (rand() % 101);
+    }
 
-
+    int randomiseVelocityY(int yPosOfCharacter){
+        return yPosOfCharacter - (rand() % 101);
+    }
 
 };
 

@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include "header files\character.h"
 #include "header files\weapon.h"
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -32,15 +34,20 @@ int main(){
     InitWindow(GAME_WIDTH, GAME_HEIGHT, "Raft Wars");
     Texture2D owletImage = loadImage("assets/Owlet_Monster.png");
     Texture2D pinkMonsterImg = loadImage("assets/Pink_Monster.png");
-    Character owl(100, 100, PLAYER_POS_Y, owletImage);
+    Character owl(500, 100, PLAYER_POS_Y, owletImage);
+    Character enemy(500, 1000, PLAYER_POS_Y, pinkMonsterImg);
     Weapon w1(5);
+    Weapon enemyWeapon(1);
     int u_x = 0; // initial velocity in the x direction
     int u_y = 0; // initial velocity in the y direction
     double a_y = -9.8; // gravity on earth
     int s_x = 0; // displacement in the x direction
     double s_y = 0; // displacement in the y direction
     double t = 0.25;
+    bool isPlayerTurn = true;
     //cout << owletImage.width * 0.5 << "\n";
+    srand(time(0));
+    //cout << rand() % 101 << "\n";
 
 
 
@@ -48,19 +55,14 @@ int main(){
 
     // Game Loop
     while(WindowShouldClose() == false){
-        // 1. Event Handling
-
-        // 2. Updating Positions
-
-
-        // 3. Drawing
         BeginDrawing();
         ClearBackground(BLACK);
         DrawTexture(owletImage, 100, PLAYER_POS_Y, WHITE);
         DrawTexture(pinkMonsterImg, 1000, PLAYER_POS_Y, WHITE);
         owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
 
-        if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY())){
+        // player shooting
+        if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY()) && isPlayerTurn){
             u_x = w1.calculate_initial_velocity_x(GetMouseX(), owl.get_xPosition()); 
             u_y = w1.calculate_initial_velocity_y(GetMouseY(), owl.get_yPosition()); 
 
@@ -69,23 +71,66 @@ int main(){
             
             w1.set_shotInProgress(true);
 
+        }else if(!isPlayerTurn){
+            u_x = enemyWeapon.calculate_initial_velocity_x(enemyWeapon.randomiseVelocityX(enemy.get_xPosition()), enemy.get_xPosition()); 
+            u_y = enemyWeapon.calculate_initial_velocity_y(enemyWeapon.randomiseVelocityY(enemy.get_yPosition()), enemy.get_yPosition()); 
+
+            s_x = enemyWeapon.calculate_displacement_x(u_x, t);
+            s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
+            
+            enemyWeapon.set_shotInProgress(true);
+
+
+            //enemyWeapon.set_xPos(enemy.get_xPosition() + s_x);
+            //enemyWeapon.set_yPos(enemy.get_yPosition() - s_y);
+            //DrawCircle(enemyWeapon.get_xPos(), enemyWeapon.get_yPos(), 2.0f, RED);
+            //t += 0.25;
+            //s_x = enemyWeapon.calculate_displacement_x(u_x, t);
+            //s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
         }
 
-        if (w1.get_shotInProgress() && (owl.get_yPosition() - s_y < owl.get_yPosition())){
+        if (w1.get_shotInProgress() && (owl.get_yPosition() - s_y < owl.get_yPosition()) && isPlayerTurn){
             w1.set_xPos(owl.get_xPosition() + s_x);
             w1.set_yPos(owl.get_yPosition() - s_y);
             DrawCircle(w1.get_xPos(), w1.get_yPos(), 2.0f, RED);
             t += 0.25;
             s_x = w1.calculate_displacement_x(u_x, t);
             s_y = w1.calculate_displacement_y(u_y, a_y, t);
-        }else{
+
+            if (enemy.isHit(w1.get_xPos(), w1.get_yPos())){
+                cout << u_x << "\n";
+                cout << u_y << "\n"; 
+                cout << t << "\n";
+                enemy.setHealthPoints(enemy.getHealthPoints() - w1.calculateDamage(u_x, u_y));
+                isPlayerTurn = false;
+            }
+
+        }else if(!enemy.isHit(w1.get_xPos(), w1.get_yPos()) && w1.get_shotInProgress()){
             w1.set_shotInProgress(false);
             s_x = 0;
             s_y = 0;
             t = 0.25;
+            isPlayerTurn = false;
+
+        }else if(enemyWeapon.get_shotInProgress() && (enemy.get_yPosition() - s_y < enemy.get_yPosition()) && !isPlayerTurn){
+            enemyWeapon.set_xPos(enemy.get_xPosition() + s_x);
+            enemyWeapon.set_yPos(enemy.get_yPosition() - s_y);
+            DrawCircle(enemyWeapon.get_xPos(), enemyWeapon.get_yPos(), 2.0f, BLUE);
+            t += 0.25;
+            s_x = enemyWeapon.calculate_displacement_x(u_x, t);
+            s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
+
+        }else if(!owl.isHit(enemyWeapon.get_xPos(), enemyWeapon.get_yPos()) && enemyWeapon.get_shotInProgress()){
+            w1.set_shotInProgress(false);
+            s_x = 0;
+            s_y = 0;
+            t = 0.25;
+            isPlayerTurn = true;
+            
         }
 
-        // need to do collision detection
+
+
         EndDrawing();
     }
     CloseWindow();
