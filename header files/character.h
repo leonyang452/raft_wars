@@ -109,6 +109,10 @@ class Character{
             return false;
         }
 
+        bool isHit(){
+            
+        }
+
     private:
         /**
          * @brief checks if a players cursor is within the shooting area
