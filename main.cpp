@@ -45,6 +45,7 @@ int main(){
     double s_y = 0; // displacement in the y direction
     double t = 0.25;
     bool isPlayerTurn = true;
+    bool enemyShooting = false;
     //cout << owletImage.width * 0.5 << "\n";
     srand(time(0));
     //cout << rand() % 101 << "\n";
@@ -71,22 +72,6 @@ int main(){
             
             w1.set_shotInProgress(true);
 
-        }else if(!isPlayerTurn){
-            u_x = enemyWeapon.calculate_initial_velocity_x(enemyWeapon.randomiseVelocityX(enemy.get_xPosition()), enemy.get_xPosition()); 
-            u_y = enemyWeapon.calculate_initial_velocity_y(enemyWeapon.randomiseVelocityY(enemy.get_yPosition()), enemy.get_yPosition()); 
-
-            s_x = enemyWeapon.calculate_displacement_x(u_x, t);
-            s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
-            
-            enemyWeapon.set_shotInProgress(true);
-
-
-            //enemyWeapon.set_xPos(enemy.get_xPosition() + s_x);
-            //enemyWeapon.set_yPos(enemy.get_yPosition() - s_y);
-            //DrawCircle(enemyWeapon.get_xPos(), enemyWeapon.get_yPos(), 2.0f, RED);
-            //t += 0.25;
-            //s_x = enemyWeapon.calculate_displacement_x(u_x, t);
-            //s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
         }
 
         if (w1.get_shotInProgress() && (owl.get_yPosition() - s_y < owl.get_yPosition()) && isPlayerTurn){
@@ -98,11 +83,11 @@ int main(){
             s_y = w1.calculate_displacement_y(u_y, a_y, t);
 
             if (enemy.isHit(w1.get_xPos(), w1.get_yPos())){
-                cout << u_x << "\n";
-                cout << u_y << "\n"; 
-                cout << t << "\n";
+                cout << "hitttt";
                 enemy.setHealthPoints(enemy.getHealthPoints() - w1.calculateDamage(u_x, u_y));
                 isPlayerTurn = false;
+                enemyShooting = true;
+
             }
 
         }else if(!enemy.isHit(w1.get_xPos(), w1.get_yPos()) && w1.get_shotInProgress()){
@@ -111,8 +96,29 @@ int main(){
             s_y = 0;
             t = 0.25;
             isPlayerTurn = false;
+            enemyShooting = true;
 
-        }else if(enemyWeapon.get_shotInProgress() && (enemy.get_yPosition() - s_y < enemy.get_yPosition()) && !isPlayerTurn){
+        }
+
+        // enemy shooting
+        if(!isPlayerTurn && enemyShooting){
+            u_x = enemyWeapon.calculate_initial_velocity_x(enemyWeapon.randomiseVelocityX(enemy.get_xPosition()), enemy.get_xPosition()); 
+            u_y = enemyWeapon.calculate_initial_velocity_y(enemyWeapon.randomiseVelocityY(enemy.get_yPosition()), enemy.get_yPosition()); 
+
+            s_x = enemyWeapon.calculate_displacement_x(u_x, t);
+            s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
+            cout << "u_x = " << u_x << "\n";
+            cout << "u_y = " << u_y << "\n";
+            cout << "s_x = " << s_x << "\n";
+            cout << "s_y = " << s_y << "\n";
+            cout << "t = " << t << "\n";
+            
+            enemyWeapon.set_shotInProgress(true);
+            //cout << enemyWeapon.get_shotInProgress();
+            enemyShooting = false;
+        }
+
+        if(enemyWeapon.get_shotInProgress() && (enemy.get_yPosition() - s_y < enemy.get_yPosition()) && !isPlayerTurn){
             enemyWeapon.set_xPos(enemy.get_xPosition() + s_x);
             enemyWeapon.set_yPos(enemy.get_yPosition() - s_y);
             DrawCircle(enemyWeapon.get_xPos(), enemyWeapon.get_yPos(), 2.0f, BLUE);
@@ -121,11 +127,12 @@ int main(){
             s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
 
         }else if(!owl.isHit(enemyWeapon.get_xPos(), enemyWeapon.get_yPos()) && enemyWeapon.get_shotInProgress()){
-            w1.set_shotInProgress(false);
+            enemyWeapon.set_shotInProgress(false);
             s_x = 0;
             s_y = 0;
             t = 0.25;
             isPlayerTurn = true;
+            //enemyShooting = false;
             
         }
 
