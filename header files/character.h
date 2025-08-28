@@ -14,10 +14,12 @@ class Character{
         int xShootArea[2];
         int yShootArea[2];
         // need to add a hitbox
+        int xHitBox[2];
+        int yHitBox[2];
 
     public:
         // Constructors
-        Character(int healthPointsIn, int xPositionIn, int yPositionIn){
+        Character(int healthPointsIn, int xPositionIn, int yPositionIn, Texture2D characterImg){
             healthPoints = healthPointsIn;
             xPosition = xPositionIn;
             yPosition = yPositionIn;
@@ -25,6 +27,12 @@ class Character{
             xShootArea[1] = xPositionIn + SHOOTING_AREA_RANGE; // right
             yShootArea[0] = yPositionIn - SHOOTING_AREA_RANGE; // up
             yShootArea[1] = yPositionIn + SHOOTING_AREA_RANGE; // down
+
+            xHitBox[0] = (int)(xPosition - (characterImg.width/2)); // lower bound in x direction
+            xHitBox[1] = (int)(xPosition + (characterImg.width/2)); // upper bound in x direction
+
+            yHitBox[0] = yPosition; // lower bound in y direction
+            yHitBox[1] = (int)(yPosition - (characterImg.height/2)); // upper bound in y direction
 
         }
 
