@@ -4,6 +4,7 @@
 #include "header files\character.h"
 #include "header files\weapon.h"
 #include "header files\player.h"
+#include "header files\enemy.h"
 #include <cstdlib>
 #include <ctime>
 
@@ -36,7 +37,7 @@ int main(){
     Texture2D owletImage = loadImage("assets/Owlet_Monster.png");
     Texture2D pinkMonsterImg = loadImage("assets/Pink_Monster.png");
     Player owl(500, 100, PLAYER_POS_Y, owletImage);
-    Player enemy(500, 1000, PLAYER_POS_Y, pinkMonsterImg);
+    Enemy enemy(500, 1000, PLAYER_POS_Y, pinkMonsterImg);
     Weapon w1(5);
     Weapon enemyWeapon(1);
     int u_x = 0; // initial velocity in the x direction
@@ -88,7 +89,7 @@ int main(){
                 cout << "hitttt" << "\n";
                 enemy.setHealthPoints(enemy.getHealthPoints() - w1.calculateDamage(u_x, u_y));
                 isPlayerTurn = false;
-                enemyShooting = true;
+                enemy.setShootingStatus(true);
                 s_x = 0;
                 s_y = 0;
                 t = 0.25;
@@ -101,12 +102,12 @@ int main(){
             s_y = 0;
             t = 0.25;
             isPlayerTurn = false;
-            enemyShooting = true;
+            enemy.setShootingStatus(true);
 
         }
 
         // enemy shooting
-        if(!isPlayerTurn && enemyShooting){
+        if(enemy.getShootingStatus() && !isPlayerTurn){
             u_x = enemyWeapon.calculate_initial_velocity_x(enemyWeapon.randomiseVelocityX(enemy.get_xPosition()), enemy.get_xPosition()); 
             u_y = enemyWeapon.calculate_initial_velocity_y(enemyWeapon.randomiseVelocityY(enemy.get_yPosition()), enemy.get_yPosition()); 
 
@@ -118,7 +119,7 @@ int main(){
             //cout << "s_y = " << s_y << "\n";
             
             enemyWeapon.set_shotInProgress(true);
-            enemyShooting = false;
+            enemy.setShootingStatus(false);
         }
 
         if(enemyWeapon.get_shotInProgress() && (enemy.get_yPosition() - s_y < enemy.get_yPosition()) && !isPlayerTurn){
@@ -135,7 +136,7 @@ int main(){
             s_y = 0;
             t = 0.25;
             isPlayerTurn = true;
-            //enemyShooting = false;
+            enemy.setShootingStatus(true);
             
         }
 

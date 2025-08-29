@@ -52,7 +52,7 @@ class Player : public Character {
          * 
          * @return true/false
          */
-        bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn) override{
+        bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn){
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && isCursorInShootingArea(xPos, yPos, mouse_xPos, mouse_yPos)){
                 return true;
             }

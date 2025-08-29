@@ -81,7 +81,7 @@ class Character{
         }
         // Methods
 
-        virtual bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn) = 0;
+        //virtual bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn) = 0;
 
         bool isHit(int weaponPosX, int weaponPosY){
             if ((xHitBox[0] <= weaponPosX && weaponPosX <= xHitBox[1]) && (yHitBox[1] <= weaponPosY && weaponPosY <= yHitBox[0])){
