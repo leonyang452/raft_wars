@@ -34,8 +34,8 @@ int main(){
     InitWindow(GAME_WIDTH, GAME_HEIGHT, "Raft Wars");
     Texture2D owletImage = loadImage("assets/Owlet_Monster.png");
     Texture2D pinkMonsterImg = loadImage("assets/Pink_Monster.png");
-    Character owl(500, 100, PLAYER_POS_Y, owletImage);
-    Character enemy(500, 1000, PLAYER_POS_Y, pinkMonsterImg);
+    Player owl(500, 100, PLAYER_POS_Y, owletImage);
+    Player enemy(500, 1000, PLAYER_POS_Y, pinkMonsterImg);
     Weapon w1(5);
     Weapon enemyWeapon(1);
     int u_x = 0; // initial velocity in the x direction
@@ -61,9 +61,10 @@ int main(){
         DrawTexture(owletImage, 100, PLAYER_POS_Y, WHITE);
         DrawTexture(pinkMonsterImg, 1000, PLAYER_POS_Y, WHITE);
         owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
+        DrawText(TextFormat("player turn"), 200, 80, 20, RED);
 
         // player shooting
-        if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY()) && isPlayerTurn){
+        if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY(), isPlayerTurn) && isPlayerTurn){
             u_x = w1.calculate_initial_velocity_x(GetMouseX(), owl.get_xPosition()); 
             u_y = w1.calculate_initial_velocity_y(GetMouseY(), owl.get_yPosition()); 
 
@@ -83,10 +84,13 @@ int main(){
             s_y = w1.calculate_displacement_y(u_y, a_y, t);
 
             if (enemy.isHit(w1.get_xPos(), w1.get_yPos())){
-                cout << "hitttt";
+                cout << "hitttt" << "\n";
                 enemy.setHealthPoints(enemy.getHealthPoints() - w1.calculateDamage(u_x, u_y));
                 isPlayerTurn = false;
                 enemyShooting = true;
+                s_x = 0;
+                s_y = 0;
+                t = 0.25;
 
             }
 
@@ -102,19 +106,18 @@ int main(){
 
         // enemy shooting
         if(!isPlayerTurn && enemyShooting){
+            cout << "shoot" << "\n";
             u_x = enemyWeapon.calculate_initial_velocity_x(enemyWeapon.randomiseVelocityX(enemy.get_xPosition()), enemy.get_xPosition()); 
             u_y = enemyWeapon.calculate_initial_velocity_y(enemyWeapon.randomiseVelocityY(enemy.get_yPosition()), enemy.get_yPosition()); 
 
             s_x = enemyWeapon.calculate_displacement_x(u_x, t);
             s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
+
             cout << "u_x = " << u_x << "\n";
-            cout << "u_y = " << u_y << "\n";
             cout << "s_x = " << s_x << "\n";
             cout << "s_y = " << s_y << "\n";
-            cout << "t = " << t << "\n";
             
             enemyWeapon.set_shotInProgress(true);
-            //cout << enemyWeapon.get_shotInProgress();
             enemyShooting = false;
         }
 

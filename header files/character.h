@@ -36,6 +36,8 @@ class Character{
 
         }
 
+        virtual ~Character() {}
+
         // Setters
         void setHealthPoints(int healthPointsIn){
             healthPoints = healthPointsIn;
@@ -62,7 +64,41 @@ class Character{
             return yPosition;
         }
 
+        int getLowerBoundShootArea_x(){
+            return xShootArea[0];
+        }
+
+        int getUpperBoundShootArea_x(){
+            return xShootArea[1];
+        }
+
+        int getLowerBoundShootArea_y(){
+            return yShootArea[0];
+        }
+
+        int getUpperBoundShootArea_y(){
+            return yShootArea[1];
+        }
         // Methods
+
+        virtual bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn) = 0;
+
+        bool isHit(int weaponPosX, int weaponPosY){
+            if ((xHitBox[0] <= weaponPosX && weaponPosX <= xHitBox[1]) && (yHitBox[1] <= weaponPosY && weaponPosY <= yHitBox[0])){
+                return true;
+            }
+            return false;
+        }
+
+
+};
+
+class Player : public Character {
+    public:
+        Player(int healthPointsIn, int xPositionIn, int yPositionIn, Texture2D characterImg)
+            : Character(healthPointsIn, xPositionIn, yPositionIn, characterImg) {}
+
+        // Implementation of abstract methods
 
         /**
          * @brief draws a line starting from a players character when the cursor enters the shooting area, showing the trajectory of what the weapon could take
@@ -90,32 +126,27 @@ class Character{
             }
         }
 
+ 
+
         /**
          * @brief checks if a player is trying to shoot there weapon
          * 
          * checks if a players cursor is within the shooting area and if the mouse is clicked
          * 
-         * @param xPos: The x coordinate of the player (Type: int)
-         * @param yPos: The y coordinate of the player (Type: int)
-         * @param mouse_xPos: The x coordinate of the cursor (Type: int)
-         * @param mouse_yPos: The y coordinate of the cursor (Type: int)
+         * @param xPos: The x coordinate of the player
+         * @param yPos: The y coordinate of the player 
+         * @param mouse_xPos: The x coordinate of the cursor
+         * @param mouse_yPos: The y coordinate of the cursor
          * 
          * @return true/false
          */
-        bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
+        bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn) override{
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && isCursorInShootingArea(xPos, yPos, mouse_xPos, mouse_yPos)){
                 return true;
             }
             return false;
         }
-
-        bool isHit(int weaponPosX, int weaponPosY){
-            if ((xHitBox[0] <= weaponPosX && weaponPosX <= xHitBox[1]) && (yHitBox[1] <= weaponPosY && weaponPosY <= yHitBox[0])){
-                return true;
-            }
-            return false;
-        }
-
+    
     private:
         /**
          * @brief checks if a players cursor is within the shooting area
@@ -130,13 +161,17 @@ class Character{
          * @return true/false
          */
         bool isCursorInShootingArea(int xPos, int yPos, int mouse_xPos, int mouse_yPos){
-            if ((xPos <= mouse_xPos) && (mouse_xPos <= xShootArea[1]) && (yShootArea[0] <= mouse_yPos) && (mouse_yPos <= yShootArea[1])){
+            int xUpperBound = getUpperBoundShootArea_x();
+            int yLowerBound = getLowerBoundShootArea_y();
+            int yUpperBound = getUpperBoundShootArea_y();
+            if ((xPos <= mouse_xPos) && (mouse_xPos <= xUpperBound) && (yLowerBound <= mouse_yPos) && (mouse_yPos <= yUpperBound)){
                 return true;
             }
             return false;
         }
-
-
 };
+
+
+
 
 #endif
