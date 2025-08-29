@@ -95,11 +95,11 @@ class Weapon{
     }
 
     int randomiseVelocityX(int xPosOfCharacter){
-        return xPosOfCharacter - (rand() % 101);
+        return xPosOfCharacter - (rand() % 51 + 50);
     }
 
     int randomiseVelocityY(int yPosOfCharacter){
-        return yPosOfCharacter - (rand() % 101);
+        return yPosOfCharacter - (rand() % 51 + 50);
     }
 
 };

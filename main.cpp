@@ -5,6 +5,7 @@
 #include "header files\weapon.h"
 #include "header files\player.h"
 #include "header files\enemy.h"
+#include "header files\button.h"
 #include <cstdlib>
 #include <ctime>
 
@@ -51,6 +52,7 @@ int main(){
     srand(time(0));
     //cout << rand() % 101 << "\n";
     bool isGameOver = false;
+    Button startButton{"assets/start_button.png", {300, 150}, 0.65};
 
 
 
@@ -62,10 +64,10 @@ int main(){
         ClearBackground(BLACK);
 
         if (enemy.getIsAlive() && owl.getIsAlive()){ //if both is alive
+            //cout << "execi=uted" << "\n";
             DrawTexture(owletImage, 100, PLAYER_POS_Y, WHITE);
             DrawTexture(pinkMonsterImg, 1000, PLAYER_POS_Y, WHITE);
             owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
-            DrawText(TextFormat("player turn"), 200, 80, 20, RED);
 
         }
 
@@ -77,6 +79,21 @@ int main(){
             s_x = 0;
             s_y = 0;
             t = 0.25;
+            Vector2 mousePosition = GetMousePosition();
+            bool mousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+
+            if(startButton.isPressed(mousePosition, mousePressed)){
+                ClearBackground(BLACK);
+                enemy.set_isAlive(true);
+                enemy.setHealthPoints(500);
+                owl.setHealthPoints(500);
+                isPlayerTurn = true;
+                s_x = 0;
+                s_y = 0;
+                t = 0.25;
+                cout << "player turn = " << isPlayerTurn << "\n";
+            }
+            startButton.Draw();
         }
 
         if (!owl.getHealthPoints()){
@@ -184,6 +201,7 @@ int main(){
         if (owl.getHealthPoints() < 0){
             owl.set_isAlive(false);
         }
+
 
 
         EndDrawing();
