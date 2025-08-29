@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include "header files\character.h"
 #include "header files\weapon.h"
+#include "header files\player.h"
 #include <cstdlib>
 #include <ctime>
 
@@ -106,16 +107,15 @@ int main(){
 
         // enemy shooting
         if(!isPlayerTurn && enemyShooting){
-            cout << "shoot" << "\n";
             u_x = enemyWeapon.calculate_initial_velocity_x(enemyWeapon.randomiseVelocityX(enemy.get_xPosition()), enemy.get_xPosition()); 
             u_y = enemyWeapon.calculate_initial_velocity_y(enemyWeapon.randomiseVelocityY(enemy.get_yPosition()), enemy.get_yPosition()); 
 
             s_x = enemyWeapon.calculate_displacement_x(u_x, t);
             s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
 
-            cout << "u_x = " << u_x << "\n";
-            cout << "s_x = " << s_x << "\n";
-            cout << "s_y = " << s_y << "\n";
+            //cout << "u_x = " << u_x << "\n";
+            //cout << "s_x = " << s_x << "\n";
+            //cout << "s_y = " << s_y << "\n";
             
             enemyWeapon.set_shotInProgress(true);
             enemyShooting = false;
