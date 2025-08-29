@@ -16,6 +16,7 @@ class Character{
         // need to add a hitbox
         int xHitBox[2];
         int yHitBox[2];
+        bool isAlive = true;
 
     public:
         // Constructors
@@ -36,8 +37,6 @@ class Character{
 
         }
 
-        virtual ~Character() {}
-
         // Setters
         void setHealthPoints(int healthPointsIn){
             healthPoints = healthPointsIn;
@@ -49,6 +48,10 @@ class Character{
 
         void set_yPosition(int yPositionIn){
             yPosition = yPositionIn;
+        }
+
+        void set_isAlive(bool isAliveIn){
+            isAlive = isAliveIn;
         }
 
         //Getters
@@ -79,9 +82,11 @@ class Character{
         int getUpperBoundShootArea_y(){
             return yShootArea[1];
         }
-        // Methods
 
-        //virtual bool isShooting(int xPos, int yPos, int mouse_xPos, int mouse_yPos, bool isPlayerTurn) = 0;
+        bool getIsAlive(){
+            return isAlive;
+        }
+        // Methods
 
         bool isHit(int weaponPosX, int weaponPosY){
             if ((xHitBox[0] <= weaponPosX && weaponPosX <= xHitBox[1]) && (yHitBox[1] <= weaponPosY && weaponPosY <= yHitBox[0])){

@@ -47,10 +47,10 @@ int main(){
     double s_y = 0; // displacement in the y direction
     double t = 0.25;
     bool isPlayerTurn = true;
-    bool enemyShooting = false;
     //cout << owletImage.width * 0.5 << "\n";
     srand(time(0));
     //cout << rand() % 101 << "\n";
+    bool isGameOver = false;
 
 
 
@@ -60,10 +60,32 @@ int main(){
     while(WindowShouldClose() == false){
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawTexture(owletImage, 100, PLAYER_POS_Y, WHITE);
-        DrawTexture(pinkMonsterImg, 1000, PLAYER_POS_Y, WHITE);
-        owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
-        DrawText(TextFormat("player turn"), 200, 80, 20, RED);
+
+        if (enemy.getIsAlive() && owl.getIsAlive()){ //if both is alive
+            DrawTexture(owletImage, 100, PLAYER_POS_Y, WHITE);
+            DrawTexture(pinkMonsterImg, 1000, PLAYER_POS_Y, WHITE);
+            owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
+            DrawText(TextFormat("player turn"), 200, 80, 20, RED);
+
+        }
+
+        // if !(enemy is alive) then we clear every thing and diaplay you win 
+        // a button can be pressed to restart setting the enemy.isAlive attribut back to true 
+
+        if (!enemy.getIsAlive()){
+            DrawText(TextFormat("You Win"), 750, 500, 100, GREEN);
+            s_x = 0;
+            s_y = 0;
+            t = 0.25;
+        }
+
+        if (!owl.getHealthPoints()){
+            DrawText(TextFormat("Game Over"), 750, 500, 100, RED);
+            s_x = 0;
+            s_y = 0;
+            t = 0.25;      
+        }
+
 
         // player shooting
         if (owl.isShooting(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY(), isPlayerTurn) && isPlayerTurn){
@@ -94,6 +116,10 @@ int main(){
                 s_y = 0;
                 t = 0.25;
 
+            }
+
+            if (enemy.getHealthPoints() < 0){
+                enemy.setShootingStatus(false);
             }
 
         }else if(!enemy.isHit(w1.get_xPos(), w1.get_yPos()) && w1.get_shotInProgress()){
@@ -130,16 +156,34 @@ int main(){
             s_x = enemyWeapon.calculate_displacement_x(u_x, t);
             s_y = enemyWeapon.calculate_displacement_y(u_y, a_y, t);
 
+            if (owl.isHit(enemyWeapon.get_xPos(), enemyWeapon.get_yPos())){
+                cout << "hitttt" << "\n";
+                owl.setHealthPoints(enemy.getHealthPoints() - w1.calculateDamage(u_x, u_y));
+                isPlayerTurn = true;
+                enemy.setShootingStatus(false);
+                s_x = 0;
+                s_y = 0;
+                t = 0.25;
+
+            }
+
         }else if(!owl.isHit(enemyWeapon.get_xPos(), enemyWeapon.get_yPos()) && enemyWeapon.get_shotInProgress()){
             enemyWeapon.set_shotInProgress(false);
             s_x = 0;
             s_y = 0;
             t = 0.25;
             isPlayerTurn = true;
-            enemy.setShootingStatus(true);
+            enemy.setShootingStatus(false);
             
         }
 
+        if (enemy.getHealthPoints() < 0){
+            enemy.set_isAlive(false);
+        }
+
+        if (owl.getHealthPoints() < 0){
+            owl.set_isAlive(false);
+        }
 
 
         EndDrawing();
