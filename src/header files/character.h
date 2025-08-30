@@ -95,6 +95,14 @@ class Character{
             return false;
         }
 
+        void displayHealthBar(int playerHealthBarPosX, int playerHealthBarPosY, int health){
+            DrawRectangle(playerHealthBarPosX, playerHealthBarPosY, health, 10, RED);
+        }
+
+        void updateHealthBar(int playerHealthBarPosX, int playerHealthBarPosY, int health){
+            DrawRectangle(playerHealthBarPosX, playerHealthBarPosY, health, 10, GREEN);
+        }
+
 
 };
 
