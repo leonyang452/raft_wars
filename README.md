@@ -3,7 +3,7 @@
 This project is inspired by the classic game _Raft Wars_, where players shoot projectiles to defeat enemies. I developed it in C++ using the raylib library.
 ## Installation instructions ##
 ---
-To run this project you need to install the `raylib` library
+To run this project you need to install the `raylib` library and `C++`
 ### Installing raylib
 - Visit the [raylib.com](https://www.raylib.com/) website
 - Download **raylib 5.5 Windows Installer (64-bit)**
