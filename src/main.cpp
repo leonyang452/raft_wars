@@ -19,14 +19,13 @@ using namespace std;
  * 
  * 
  * @return texture of the image -> Type: Texture2D
- */
+ */ 
 Texture2D loadImage(const char* filePath){
     Image p1 = LoadImage(filePath);
     Texture2D texture = LoadTextureFromImage(p1);
     UnloadImage(p1);
     return texture;
 }
-
 int main(){
     int ballX = 400;
     int ballY = 400;
@@ -35,10 +34,10 @@ int main(){
     int PLAYER_POS_Y = 700;
     Color green = {20, 160, 133, 255};
     InitWindow(GAME_WIDTH, GAME_HEIGHT, "Raft Wars");
-    Texture2D owletImage = loadImage("assets/Owlet_Monster.png");
-    Texture2D pinkMonsterImg = loadImage("assets/Pink_Monster.png");
-    Player owl(500, 100, PLAYER_POS_Y, owletImage);
-    Enemy enemy(500, 1000, PLAYER_POS_Y, pinkMonsterImg);
+    Texture2D owletImage = loadImage("../assets/Owlet_Monster.png");
+    Texture2D pinkMonsterImg = loadImage("../assets/Pink_Monster.png");
+    Player owl(250, 100, PLAYER_POS_Y, owletImage);
+    Enemy enemy(250, 1000, PLAYER_POS_Y, pinkMonsterImg);
     Weapon w1(5);
     Weapon enemyWeapon(1);
     int u_x = 0; // initial velocity in the x direction
@@ -52,11 +51,8 @@ int main(){
     srand(time(0));
     //cout << rand() % 101 << "\n";
     bool isGameOver = false;
-    Button startButton{"assets/start_button.png", {300, 150}, 0.65};
-
-
-
-    SetTargetFPS(60); // 60 times per second
+    Button startButton{"../assets/start_button.png", {300, 150}, 0.65};
+    SetTargetFPS(60); 
 
     // Game Loop
     while(WindowShouldClose() == false){
@@ -69,10 +65,7 @@ int main(){
             DrawTexture(pinkMonsterImg, 1000, PLAYER_POS_Y, WHITE);
             owl.drawShootArea(owl.get_xPosition(), owl.get_yPosition(), GetMouseX(), GetMouseY());
 
-        }
-
-        // if !(enemy is alive) then we clear every thing and diaplay you win 
-        // a button can be pressed to restart setting the enemy.isAlive attribut back to true 
+        } 
 
         if (!enemy.getIsAlive()){
             DrawText(TextFormat("You Win"), 750, 500, 100, GREEN);
@@ -91,16 +84,31 @@ int main(){
                 s_x = 0;
                 s_y = 0;
                 t = 0.25;
-                cout << "player turn = " << isPlayerTurn << "\n";
+                //cout << "player turn = " << isPlayerTurn << "\n";
             }
             startButton.Draw();
         }
 
-        if (!owl.getHealthPoints()){
-            DrawText(TextFormat("Game Over"), 750, 500, 100, RED);
+        if (!owl.getIsAlive()){
+            DrawText(TextFormat("You lose"), 750, 500, 100, RED);
             s_x = 0;
             s_y = 0;
-            t = 0.25;      
+            t = 0.25;
+            Vector2 mousePosition = GetMousePosition();
+            bool mousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+
+            if(startButton.isPressed(mousePosition, mousePressed)){
+                ClearBackground(BLACK);
+                owl.set_isAlive(true);
+                enemy.setHealthPoints(500);
+                owl.setHealthPoints(500);
+                isPlayerTurn = true;
+                s_x = 0;
+                s_y = 0;
+                t = 0.25;
+                //cout << "player turn = " << isPlayerTurn << "\n";
+            }
+            startButton.Draw();
         }
 
 
@@ -134,11 +142,6 @@ int main(){
                 t = 0.25;
 
             }
-
-            if (enemy.getHealthPoints() < 0){
-                enemy.setShootingStatus(false);
-            }
-
         }else if(!enemy.isHit(w1.get_xPos(), w1.get_yPos()) && w1.get_shotInProgress()){
             w1.set_shotInProgress(false);
             s_x = 0;
@@ -175,7 +178,7 @@ int main(){
 
             if (owl.isHit(enemyWeapon.get_xPos(), enemyWeapon.get_yPos())){
                 cout << "hitttt" << "\n";
-                owl.setHealthPoints(enemy.getHealthPoints() - w1.calculateDamage(u_x, u_y));
+                owl.setHealthPoints(owl.getHealthPoints() - enemyWeapon.calculateDamage(u_x, u_y));
                 isPlayerTurn = true;
                 enemy.setShootingStatus(false);
                 s_x = 0;
@@ -193,6 +196,10 @@ int main(){
             enemy.setShootingStatus(false);
             
         }
+
+
+
+
 
         if (enemy.getHealthPoints() < 0){
             enemy.set_isAlive(false);
